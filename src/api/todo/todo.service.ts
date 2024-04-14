@@ -25,7 +25,7 @@ export class TodoService {
         const updTodo = await TodoModel.findOneAndUpdate(filter, update, {
           new: true
         });
-
+        
         return updTodo;
       }
     
