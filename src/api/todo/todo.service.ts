@@ -15,18 +15,27 @@ export class TodoService {
         return TodoModel.find();
     }
 
-    async update(id: string): Promise<Todo> {
+    async update(id: string)  {
     
         const filter = { id: id };
         const update = { completed: true };
+    
+        //new true per ritornare il document
+        const updTodo = await TodoModel.findOneAndUpdate(filter, update);
         
-        // `doc` is the document _after_ `update` was applied because of
-        // `new: true`
-        const updTodo = await TodoModel.findOneAndUpdate(filter, update, {
-          new: true
-        });
-        
-        return updTodo;
+        /*
+        const existing = await TodoModel.findById(id);
+        if (!existing) {
+          throw new NotFoundError();
+        }
+
+        Object.assign(existing, {completed: true});
+        await existing.save();
+        const updated = await this.getById(id);
+        return updated!;
+        */
+
+        return "fatto";
       }
     
 }

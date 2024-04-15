@@ -12,32 +12,42 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
 }
 
 export const add = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { title, dueDate } = req.body;
-      
-      const completed = false;
-      let expired = false;
+  try {
+    const { title, dueDate } = req.body;
+    
+    const completed = false;
+    let expired = false;
 
-      var varDate = new Date(dueDate);
-      var today = new Date();
-      if(varDate < today ) {
-        expired = true;
-      }
-
-      
-      const newTodo: Todo = {
-        title,
-        dueDate,
-        completed,
-        expired
-      }
-  
-      const saved = await todoService.add(newTodo);
-      //
-      res.json(saved);
-    } catch(err) {
-      next(err);
+    var varDate = new Date(dueDate);
+    var today = new Date();
+    if(varDate < today ) {
+      expired = true;
     }
-  }
 
-  
+    
+    const newTodo: Todo = {
+      title,
+      dueDate,
+      completed,
+      expired
+    }
+
+    const saved = await todoService.add(newTodo);
+    //
+    res.json(saved);
+  } catch(err) {
+    next(err);
+  }
+}
+
+export const setCompleted = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+
+    const updated = await todoService.update(id);
+    
+    res.json(updated);
+  } catch(err) {
+    next(err);
+  }
+}
