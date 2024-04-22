@@ -1,3 +1,4 @@
+import { TodoQueryDTO } from "./todo.dto";
 import { Todo } from "./todo.entity";
 import { TodoModel } from "./todo.model";
 
@@ -11,31 +12,29 @@ export class TodoService {
         return newTodo;
     }
 
-    async list(): Promise<Todo[]> {
+    async list(showCompleted: Boolean): Promise<Todo[]> {
+      console.log(showCompleted);
+
+      if(showCompleted) {
         return TodoModel.find();
+      }
+      return TodoModel.find({completed: false});
     }
 
-    async update(id: string)  {
+    async update(id: string, varCompleted: Boolean): Promise<Todo | null>  {
     
-        const filter = { id: id };
-        const update = { completed: true };
+        const filter = { _id: id };
+        const update = { completed: varCompleted };
     
-        //new true per ritornare il document
-        const updTodo = await TodoModel.findOneAndUpdate(filter, update);
+        const updTodo = await TodoModel.findOneAndUpdate(filter, update, { new: true });
         
-        /*
+        
         const existing = await TodoModel.findById(id);
         if (!existing) {
-          throw new NotFoundError();
+          //throw new NotFoundError();
         }
 
-        Object.assign(existing, {completed: true});
-        await existing.save();
-        const updated = await this.getById(id);
-        return updated!;
-        */
-
-        return "fatto";
+        return updTodo;
       }
     
 }
