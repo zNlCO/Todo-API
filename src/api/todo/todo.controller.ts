@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Todo } from "./todo.entity";
 import todoService from "./todo.service";
-import { TodoQueryDTO } from "./todo.dto";
+import { TodoAddDTO } from "./todo.dto";
 import { TypedRequest } from "../../utils/typed-request.interface";
 
 /*
@@ -25,7 +25,7 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-export const add = async (req: Request, res: Response, next: NextFunction) => {
+export const add = async (req: TypedRequest<TodoAddDTO> , res: Response, next: NextFunction) => {
   try {
     const { title, dueDate } = req.body;
     
@@ -49,6 +49,7 @@ export const add = async (req: Request, res: Response, next: NextFunction) => {
     const saved = await todoService.add(newTodo);
     //
     res.json(saved);
+    
   } catch(err) {
     next(err);
   }

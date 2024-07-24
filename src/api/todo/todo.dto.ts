@@ -1,3 +1,6 @@
-export class TodoQueryDTO {
-    completed: Boolean;
+import { Type } from "class-transformer";
+
+export class TodoAddDTO {
+    title: string;
+    dueDate: Date;
   }

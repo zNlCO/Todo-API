@@ -1,4 +1,3 @@
-import { TodoQueryDTO } from "./todo.dto";
 import { Todo } from "./todo.entity";
 import { TodoModel } from "./todo.model";
 
