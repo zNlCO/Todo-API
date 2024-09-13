@@ -17,8 +17,9 @@ export const list = async (req: TypedRequest<unknown, TodoQueryDTO>, res: Respon
 
 export const list = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const user = req.user!;
     const checkCompleted = req.query.showCompleted === 'true';
-    const todos = await todoService.list(checkCompleted);
+    const todos = await todoService.list(checkCompleted, user.id!);
     res.json(todos);
   } catch(err) {
     next(err);
@@ -27,28 +28,20 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
 
 export const add = async (req: TypedRequest<TodoAddDTO> , res: Response, next: NextFunction) => {
   try {
+    const user = req.user!;
     const { title, dueDate } = req.body;
     
     const completed = false;
-    let expired = false;
-
-    const varDate = new Date(dueDate);
-    const today = new Date();
-    if(varDate < today ) {
-      expired = true;
-    }
-
     
     const newTodo: Todo = {
       title,
       dueDate,
-      completed,
-      expired
+      completed
     }
 
-    const saved = await todoService.add(newTodo);
-    //
-    res.json(saved);
+    const saved = await todoService.add(newTodo, user.id!);
+    
+    res.json(saved).status(201);
     
   } catch(err) {
     next(err);
@@ -57,9 +50,10 @@ export const add = async (req: TypedRequest<TodoAddDTO> , res: Response, next: N
 
 export const checkCompleted = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const user = req.user!;
     const { id } = req.params;
 
-    const updated = await todoService.update(id, true);
+    const updated = await todoService.update(id, true, user.id!);
     
     res.json(updated);
   } catch(err) {
@@ -69,9 +63,10 @@ export const checkCompleted = async (req: Request, res: Response, next: NextFunc
 
 export const uncheckCompleted = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const user = req.user!;
     const { id } = req.params;
 
-    const updated = await todoService.update(id, false);
+    const updated = await todoService.update(id, false, user.id!);
     
     res.json(updated);
   } catch(err) {

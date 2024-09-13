@@ -2,3 +2,6 @@ TODO:
 -metti controlli nell'api
 -metti showCompleted nell'api list
 -metti gli update con controlli
+
+-metti più controlli possibili nei middleware (principalmente per l'autenticazione)
+

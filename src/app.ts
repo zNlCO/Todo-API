@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import apiRouter from './api/routes';
 import bodyParser from 'body-parser';
 import { errorHandlers } from './errors';
+import './utils/auth/auth-handlers';
 
 const app = express();
 
@@ -13,6 +14,8 @@ app.use(bodyParser.json());
 
 app.use('/api', apiRouter);
 
-//app.use(errorHandlers);
+app.use(errorHandlers);
+
+
 
 export default app;

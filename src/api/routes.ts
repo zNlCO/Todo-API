@@ -1,11 +1,12 @@
-import { Router } from 'express';
-import { add, checkCompleted, list, uncheckCompleted } from './todo/todo.controller';
+import express from 'express';
+import todoRouter from './todo/todo.routes';
+import userRouter from './user/user.routes';
+import authRouter from './auth/auth.router';
 
-const router = Router();
+const router = express.Router();
 
-router.post('/todos/', add);
-router.get('/todos/', list);
-router.patch('/todos/:id/check', checkCompleted)
-router.patch('/todos/:id/uncheck', uncheckCompleted)
+router.use('/todos', todoRouter);
+router.use('/users', userRouter);
+router.use(authRouter);
 
 export default router;

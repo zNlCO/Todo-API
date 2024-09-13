@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { Todo } from "./todo.entity";
+import { assign } from "lodash";
 
 //per mongoDB
 //i due boolean nell'input saranno settati di default
@@ -7,8 +8,13 @@ const todoSchema = new Schema<Todo>({
   title: String,
   dueDate: Date,
   completed: Boolean,
-  expired: Boolean
+  createdBy: Schema.Types.ObjectId,
+  assignTo: Schema.Types.ObjectId
 });
+
+todoSchema.virtual('expired').get(function() {
+  return this.dueDate! < new Date() && this.completed === false;
+})
 
 todoSchema.set('toJSON', {
     virtuals: true,
@@ -18,7 +24,8 @@ todoSchema.set('toJSON', {
         //tolgo l'id di mongo dato che non mi serve nell'entity
         delete ret._id;
         delete ret.__v;
-        
+        delete ret.createdBy;
+        delete ret.assignTo;
         return ret;
     }
   });
