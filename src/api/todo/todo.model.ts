@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 import { Todo } from "./todo.entity";
-import { assign } from "lodash";
 
 //per mongoDB
 //i due boolean nell'input saranno settati di default
@@ -8,8 +7,8 @@ const todoSchema = new Schema<Todo>({
   title: String,
   dueDate: Date,
   completed: Boolean,
-  createdBy: Schema.Types.ObjectId,
-  assignTo: Schema.Types.ObjectId
+  createdBy: { type: Schema.Types.ObjectId, ref: "User"},
+  assignTo: { type: Schema.Types.ObjectId, ref: "User"}
 });
 
 todoSchema.virtual('expired').get(function() {

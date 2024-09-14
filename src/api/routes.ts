@@ -1,7 +1,7 @@
 import express from 'express';
 import todoRouter from './todo/todo.routes';
 import userRouter from './user/user.routes';
-import authRouter from './auth/auth.router';
+import authRouter from './auth/auth.routes';
 
 const router = express.Router();
 

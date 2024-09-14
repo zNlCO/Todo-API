@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { Todo } from "./todo.entity";
-import todoService from "./todo.service";
+import { TodoService } from "./todo.service"; 
 import { TodoAddDTO } from "./todo.dto";
 import { TypedRequest } from "../../utils/typed-request.interface";
+
+const todoService = new TodoService();
 
 /*
 export const list = async (req: TypedRequest<unknown, TodoQueryDTO>, res: Response, next: NextFunction) => {
@@ -17,9 +19,9 @@ export const list = async (req: TypedRequest<unknown, TodoQueryDTO>, res: Respon
 
 export const list = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = req.user!;
+    const userId = req.user!.id;
     const checkCompleted = req.query.showCompleted === 'true';
-    const todos = await todoService.list(checkCompleted, user.id!);
+    const todos = await todoService.list(checkCompleted, userId!);
     res.json(todos);
   } catch(err) {
     next(err);
@@ -29,17 +31,17 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
 export const add = async (req: TypedRequest<TodoAddDTO> , res: Response, next: NextFunction) => {
   try {
     const user = req.user!;
-    const { title, dueDate } = req.body;
-    
+    const { title, dueDate, assignTo } = req.body;
+
     const completed = false;
     
     const newTodo: Todo = {
       title,
-      dueDate,
-      completed
+      completed,
+      ...(dueDate ? { dueDate: new Date(dueDate) } : {})
     }
 
-    const saved = await todoService.add(newTodo, user.id!);
+    const saved = await todoService.add(newTodo, user.id!, assignTo);
     
     res.json(saved).status(201);
     
@@ -53,7 +55,7 @@ export const checkCompleted = async (req: Request, res: Response, next: NextFunc
     const user = req.user!;
     const { id } = req.params;
 
-    const updated = await todoService.update(id, true, user.id!);
+    const updated = await todoService.update(id, true);
     
     res.json(updated);
   } catch(err) {
@@ -66,7 +68,7 @@ export const uncheckCompleted = async (req: Request, res: Response, next: NextFu
     const user = req.user!;
     const { id } = req.params;
 
-    const updated = await todoService.update(id, false, user.id!);
+    const updated = await todoService.update(id, false);
     
     res.json(updated);
   } catch(err) {
