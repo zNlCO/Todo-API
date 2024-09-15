@@ -31,7 +31,7 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
 export const add = async (req: TypedRequest<TodoAddDTO> , res: Response, next: NextFunction) => {
   try {
     const user = req.user!;
-    const { title, dueDate, assignTo } = req.body;
+    const { title, assignTo, dueDate  } = req.body;
 
     const completed = false;
     

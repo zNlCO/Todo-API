@@ -6,6 +6,7 @@ export class TodoAddDTO {
     title: string;
 
     @IsOptional()
+    @Type(() => Date)
     @IsDate()
     dueDate: Date;
 

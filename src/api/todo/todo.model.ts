@@ -23,8 +23,6 @@ todoSchema.set('toJSON', {
         //tolgo l'id di mongo dato che non mi serve nell'entity
         delete ret._id;
         delete ret.__v;
-        delete ret.createdBy;
-        delete ret.assignTo;
         return ret;
     }
   });

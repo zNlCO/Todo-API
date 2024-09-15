@@ -26,6 +26,20 @@ export class UserService {
 
     return newUser;
   }
+
+  async list(userId: string): Promise<User[]> {
+    // Recupera tutti gli utenti
+    const users = await UserModel.find();
+
+    // Trova l'utente con l'ID specificato
+    const selectedUser = users.find(user => user.id === userId);
+
+    // Filtra il resto degli utenti escludendo quello selezionato
+    const otherUsers = users.filter(user => user.id !== userId);
+
+    // Ritorna l'utente selezionato seguito dagli altri
+    return selectedUser ? [selectedUser, ...otherUsers] : otherUsers;
+  }
   
 }
 
